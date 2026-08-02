@@ -10,6 +10,7 @@
     "dev": "node scripts/run-vinext.mjs dev",
     "prebuild": "node scripts/generate-image-manifest.mjs",
     "build": "node scripts/run-vinext.mjs build",
+    "build:vercel": "node scripts/generate-image-manifest.mjs && next build",
     "start": "node scripts/run-vinext.mjs start",
     "test": "npm run build && node --test tests/rendered-html.test.mjs",
     "lint": "eslint . --ignore-pattern dist --ignore-pattern .next",

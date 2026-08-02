@@ -11,6 +11,8 @@ npm run dev
 
 Open `http://localhost:3000`. Use `npm test` for a production build plus the storefront architecture checks.
 
+For Vercel, import the repository normally; `vercel.json` selects the standard Next.js production build.
+
 ## Catalog architecture
 
 Products live in `data/catalog.ts` and follow the `Product` model in `types/product.ts`. Pages for products, brands and categories are generated from that single source, so adding inventory does not require creating route files.
