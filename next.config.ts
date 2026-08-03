@@ -5,6 +5,7 @@ const nextConfig: NextConfig = {
   compress: true,
   images: {
     formats: ["image/avif", "image/webp"],
+    unoptimized: process.env.NODE_ENV === "development",
   },
   turbopack: {
     root: process.cwd(),

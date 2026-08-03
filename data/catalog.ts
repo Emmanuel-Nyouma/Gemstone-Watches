@@ -7,6 +7,46 @@ const withImages = <T extends Omit<Product, "images" | "thumbnail">>(product: T)
   return { ...product, images: images.length ? images : [fallback], thumbnail: images[0] ?? fallback };
 };
 
+const additionalBrand = (name: string, slug: string, origin: string): Brand => ({
+  name,
+  slug,
+  origin,
+  introduction: `${name} propose une identité horlogère reconnaissable, avec des modèles pensés pour accompagner le quotidien, les grandes occasions et les styles personnels.`,
+  seoCopy: `Découvrez la sélection évolutive de montres ${name} proposée par Gemstone Watches à Douala, avec livraison au Cameroun et expédition internationale.`,
+});
+
+const additionalBrands: Brand[] = [
+  additionalBrand("Casio", "casio", "Tokyo, Japon"),
+  additionalBrand("POEDAGAR", "poedagar", "Collection internationale"),
+  additionalBrand("Successway", "successway", "Collection internationale"),
+  additionalBrand("Audemars Piguet", "audemars-piguet", "Le Brassus, Suisse"),
+  additionalBrand("Patek Philippe", "patek-philippe", "Genève, Suisse"),
+  additionalBrand("Richard Mille", "richard-mille", "Les Breuleux, Suisse"),
+  additionalBrand("Jacob & Co.", "jacob-and-co", "New York, États-Unis"),
+  additionalBrand("Hislon", "hislon", "Istanbul, Turquie"),
+  additionalBrand("Timekey", "timekey", "Collection internationale"),
+  additionalBrand("IWC", "iwc", "Schaffhouse, Suisse"),
+  additionalBrand("Gucci", "gucci", "Florence, Italie"),
+  additionalBrand("Michael Kors", "michael-kors", "New York, États-Unis"),
+  additionalBrand("Calvin Klein", "calvin-klein", "New York, États-Unis"),
+  additionalBrand("Emporio Armani", "emporio-armani", "Milan, Italie"),
+  additionalBrand("Vacheron Constantin", "vacheron-constantin", "Genève, Suisse"),
+  additionalBrand("Baume & Mercier", "baume-et-mercier", "Genève, Suisse"),
+  additionalBrand("St. Alexander", "st-alexander", "Collection internationale"),
+  additionalBrand("Hublot", "hublot", "Nyon, Suisse"),
+  additionalBrand("Curren", "curren", "Collection internationale"),
+  additionalBrand("SKMEI", "skmei", "Collection internationale"),
+  additionalBrand("G-SHOCK", "g-shock", "Tokyo, Japon"),
+  additionalBrand("Hugo Boss", "hugo-boss", "Metzingen, Allemagne"),
+  additionalBrand("BVLGARI", "bvlgari", "Rome, Italie"),
+  additionalBrand("Hermès", "hermes", "Paris, France"),
+  additionalBrand("Montblanc", "montblanc", "Hambourg, Allemagne"),
+  additionalBrand("Movado", "movado", "La Chaux-de-Fonds, Suisse"),
+  additionalBrand("Fossil", "fossil", "Richardson, États-Unis"),
+  additionalBrand("Dior", "dior", "Paris, France"),
+  additionalBrand("Daniel Wellington", "daniel-wellington", "Stockholm, Suède"),
+];
+
 export const brands: Brand[] = [
   {
     name: "Rolex",
@@ -72,6 +112,7 @@ export const brands: Brand[] = [
     introduction: "Citizen advances Japanese watchmaking through precise engineering, progressive materials and expressive mechanical design.",
     seoCopy: "Discover Citizen watches with modern finishing, reliable movements and innovative technology built for daily life.",
   },
+  ...additionalBrands,
 ];
 
 export const categories: Category[] = [

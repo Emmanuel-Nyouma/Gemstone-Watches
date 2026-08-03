@@ -5,5 +5,13 @@ export const CONTACT = {
   email: "concierge@gemstonewatches.com",
   phone: "+1 (212) 555-0188",
   whatsapp: "12125550188",
-  address: "28 Mercer Street, New York, NY 10013",
+  address: "Douala, Littoral, Cameroun",
+};
+
+export const SOCIAL_LINKS = {
+  whatsapp: `https://wa.me/${CONTACT.whatsapp}`,
+  instagram: "https://instagram.com/gemstonewatches",
+  facebook: "https://facebook.com/gemstonewatches",
+  tiktok: "https://tiktok.com/@gemstonewatches",
+  twitter: "https://x.com/gemstonewatches",
 };

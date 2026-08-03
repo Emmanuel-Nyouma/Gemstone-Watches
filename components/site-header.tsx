@@ -33,8 +33,9 @@ export function SiteHeader() {
                 <div>
                   <p className="menu-kicker">Watchmakers</p>
                   <div className="mega-links">
-                    {brands.map((brand) => <Link key={brand.slug} href={`/brands/${brand.slug}`}>{brand.name}<span>{brand.origin.split(",")[0]}</span></Link>)}
+                    {brands.slice(0, 12).map((brand) => <Link key={brand.slug} href={`/brands/${brand.slug}`}>{brand.name}<span>{brand.origin.split(",")[0]}</span></Link>)}
                   </div>
+                  <Link className="all-brands-link" href="/brands">Voir toutes les marques →</Link>
                 </div>
                 <Link className="mega-feature" href="/brands/omega">
                   <span>Editorial selection</span>
@@ -53,7 +54,7 @@ export function SiteHeader() {
                 ))}
               </div>
             </details>
-            <Link href="/about">Our story</Link>
+            <Link href="/about">À propos</Link>
             <Link href="/contact">Contact</Link>
           </nav>
           <button className="search-trigger" type="button" onClick={() => setSearchOpen(true)} aria-label="Search watches">
@@ -73,7 +74,7 @@ export function SiteHeader() {
             <p>Featured brands</p>
             {brands.slice(0, 6).map((brand) => <Link key={brand.slug} href={`/brands/${brand.slug}`}>{brand.name}</Link>)}
             <p>Discover</p>
-            <Link href="/about">Our story</Link>
+            <Link href="/about">À propos</Link>
             <Link href="/contact">Contact & concierge</Link>
           </nav>
         </div>

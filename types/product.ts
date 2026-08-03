@@ -32,7 +32,7 @@ export type Product = {
 export type Brand = {
   name: string;
   slug: string;
-  founded: string;
+  founded?: string;
   origin: string;
   introduction: string;
   seoCopy: string;
