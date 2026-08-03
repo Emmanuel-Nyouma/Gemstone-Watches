@@ -577,7 +577,8 @@ h1 em, h2 em { color: var(--gold); font-weight: 400; }
 
 /* Catalog administration */
 body:has(.admin-root) .site-header,
-body:has(.admin-root) .site-footer { display: none; }
+body:has(.admin-root) .site-footer,
+body:has(.admin-root) .whatsapp-widget { display: none; }
 body:has(.admin-root) #main-content { min-height: 100vh; }
 .admin-root { min-height: 100vh; background: #f4f1ea; color: #161616; }
 .admin-login { min-height: 100vh; display: grid; place-items: center; padding: 32px 18px; background: radial-gradient(circle at 10% 10%, #3a352d 0, #181714 42%, #0b0b0a 100%); }
@@ -646,6 +647,11 @@ body:has(.admin-root) #main-content { min-height: 100vh; }
 .gallery-thumbs .video-thumb video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: .45; }
 .gallery-thumbs .video-thumb span { position: relative; z-index: 1; display: grid; place-items: center; gap: .15rem; font-size: .64rem; font-weight: 700; text-transform: uppercase; }
 
+.whatsapp-widget { position: fixed; z-index: 80; right: 22px; bottom: 22px; display: inline-flex; align-items: center; gap: 10px; padding: 13px 17px 13px 14px; border-radius: 999px; background: #25d366; color: #071d10; box-shadow: 0 14px 32px #0004; font-size: 13px; font-weight: 800; line-height: 1; transition: transform .25s ease, box-shadow .25s ease, background-color .25s ease; }
+.whatsapp-widget svg { width: 23px; height: 23px; flex: 0 0 auto; }
+.whatsapp-widget:hover { background: #46e384; box-shadow: 0 18px 38px #0005; transform: translateY(-3px); }
+.whatsapp-widget:focus-visible { outline: 3px solid #fff; outline-offset: 3px; }
+
 @media (max-width: 900px) {
   .admin-shell { grid-template-columns: 1fr; }
   .admin-sidebar { position: static; height: auto; gap: 24px; }
@@ -661,4 +667,6 @@ body:has(.admin-root) #main-content { min-height: 100vh; }
   .admin-field-row, .admin-field-row-3 { grid-template-columns: 1fr; }
   .admin-stat-grid { grid-template-columns: 1fr 1fr; }
   .admin-stat-grid article { padding: 20px; }
+  .whatsapp-widget { right: 16px; bottom: 16px; width: 54px; height: 54px; justify-content: center; padding: 0; }
+  .whatsapp-widget span { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
 }

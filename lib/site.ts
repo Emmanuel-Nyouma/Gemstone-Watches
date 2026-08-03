@@ -4,7 +4,7 @@ export const SITE_DESCRIPTION = "Curated luxury watches, authenticated with care
 export const CONTACT = {
   email: "concierge@gemstonewatches.com",
   phone: "+1 (212) 555-0188",
-  whatsapp: "12125550188",
+  whatsapp: "237659178587",
   address: "Douala, Littoral, Cameroun",
 };
 
@@ -15,3 +15,5 @@ export const SOCIAL_LINKS = {
   tiktok: "https://tiktok.com/@gemstonewatches",
   twitter: "https://x.com/gemstonewatches",
 };
+
+export const getWhatsAppLink = (message?: string) => `${SOCIAL_LINKS.whatsapp}${message ? `?text=${encodeURIComponent(message)}` : ""}`;
