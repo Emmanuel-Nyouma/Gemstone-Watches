@@ -1,10 +1,10 @@
 import Link from "next/link";
 import { FaFacebookF, FaInstagram, FaTiktok, FaWhatsapp } from "react-icons/fa";
 import { FaXTwitter } from "react-icons/fa6";
-import { brands, categories } from "@/data/catalog";
 import { CONTACT, SOCIAL_LINKS } from "@/lib/site";
+import type { Brand, Category } from "@/types/product";
 
-export function SiteFooter() {
+export function SiteFooter({ brands, categories }: { brands: Brand[]; categories: Category[] }) {
   return (
     <footer className="site-footer">
       <div className="shell footer-top">

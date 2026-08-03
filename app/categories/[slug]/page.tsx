@@ -3,21 +3,23 @@ import { notFound } from "next/navigation";
 import { Breadcrumb } from "@/components/breadcrumb";
 import { ProductExplorer } from "@/components/product-explorer";
 import { StructuredData } from "@/components/structured-data";
-import { categories, getCategory, getCategoryProducts } from "@/data/catalog";
+import { getCatalogCategories, getCatalogCategory, getCatalogCategoryProducts } from "@/lib/catalog/repository";
 import { SITE_NAME, SITE_URL } from "@/lib/site";
 
-export function generateStaticParams() { return categories.map(({ slug }) => ({ slug })); }
+export const revalidate = 300;
+
+export async function generateStaticParams() { return (await getCatalogCategories()).map(({ slug }) => ({ slug })); }
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
-  const category = getCategory((await params).slug);
+  const category = await getCatalogCategory((await params).slug);
   if (!category) return {};
   return { title: `${category.name} – Curated Timepieces`, description: `${category.description} Shop authenticated ${category.name.toLowerCase()} at ${SITE_NAME}.`, alternates: { canonical: `/categories/${category.slug}` }, openGraph: { title: category.name, description: category.description, url: `/categories/${category.slug}` } };
 }
 
 export default async function CategoryPage({ params }: { params: Promise<{ slug: string }> }) {
-  const category = getCategory((await params).slug);
+  const category = await getCatalogCategory((await params).slug);
   if (!category) notFound();
-  const categoryProducts = getCategoryProducts(category.slug);
+  const categoryProducts = await getCatalogCategoryProducts(category.slug);
   return (
     <>
       <StructuredData data={{ "@context": "https://schema.org", "@type": "BreadcrumbList", itemListElement: [{ "@type": "ListItem", position: 1, name: "Home", item: SITE_URL }, { "@type": "ListItem", position: 2, name: "Collections", item: `${SITE_URL}/shop` }, { "@type": "ListItem", position: 3, name: category.name, item: `${SITE_URL}/categories/${category.slug}` }] }} />

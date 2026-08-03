@@ -1,0 +1,7 @@
+import { getAdminBrands } from "@/lib/catalog/repository";
+import { saveBrand } from "../../actions";
+
+export default async function AdminBrandsPage() {
+  const brands = await getAdminBrands();
+  return <><header className="admin-page-header"><div><p className="eyebrow">Structure</p><h1>Marques</h1><p>Une marque peut contenir plusieurs collections et plusieurs milliers de produits.</p></div></header><div className="admin-two-column"><section className="admin-panel"><h2>Ajouter ou mettre à jour</h2><form action={saveBrand} className="admin-form"><div className="admin-field-row"><label>Nom<input name="name" required /></label><label>Slug<input name="slug" placeholder="généré automatiquement" /></label></div><div className="admin-field-row"><label>Année de fondation<input name="founded" /></label><label>Origine<input name="origin" placeholder="Suisse" /></label></div><label>Introduction<textarea name="introduction" rows={4} /></label><label>Texte SEO<textarea name="seoCopy" rows={6} /></label><button className="button button-dark" type="submit">Enregistrer la marque</button></form></section><section className="admin-panel"><h2>{brands.length} marques dans Neon</h2><div className="admin-list">{brands.map((brand) => <article key={brand.id}><div><strong>{brand.name}</strong><span>/{brand.slug}</span></div><small>{brand.published ? "Publiée" : "Brouillon"}</small></article>)}{!brands.length && <p>La base Neon n’est pas encore configurée ou ne contient aucune marque.</p>}</div></section></div></>;
+}

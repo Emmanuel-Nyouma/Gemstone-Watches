@@ -9,23 +9,28 @@ import { ProductGallery } from "@/components/product-gallery";
 import { RecentlyViewed } from "@/components/recently-viewed";
 import { SectionHeading } from "@/components/section-heading";
 import { StructuredData } from "@/components/structured-data";
-import { formatPrice, getProduct, products } from "@/data/catalog";
+import { formatPrice } from "@/data/catalog";
+import { getCatalogProduct, getCatalogProducts } from "@/lib/catalog/repository";
 import { SITE_NAME, SITE_URL } from "@/lib/site";
 
-export function generateStaticParams() { return products.map(({ slug }) => ({ slug })); }
+export const revalidate = 300;
+
+const absoluteImageUrl = (url: string) => url.startsWith("http://") || url.startsWith("https://") ? url : `${SITE_URL}${url}`;
+
+export async function generateStaticParams() { return (await getCatalogProducts({ limit: 5000 })).map(({ slug }) => ({ slug })); }
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
-  const product = getProduct((await params).slug);
+  const product = await getCatalogProduct((await params).slug);
   if (!product) return {};
   const description = `${product.brand} ${product.model}, ref. ${product.referenceNumber}, in ${product.condition.toLowerCase()} condition. ${product.movement} movement, ${product.caseSize} mm case. View full specifications.`;
   return { title: `${product.brand} ${product.model} – Ref. ${product.referenceNumber}`, description, alternates: { canonical: `/products/${product.slug}` }, openGraph: { type: "website", title: `${product.title} | ${SITE_NAME}`, description, url: `/products/${product.slug}`, images: [{ url: product.thumbnail, width: 1200, height: 1400, alt: `${product.brand} ${product.model} ${product.dialColor} dial` }] }, twitter: { card: "summary_large_image", title: product.title, description, images: [product.thumbnail] } };
 }
 
 export default async function ProductPage({ params }: { params: Promise<{ slug: string }> }) {
-  const product = getProduct((await params).slug);
+  const product = await getCatalogProduct((await params).slug);
   if (!product) notFound();
-  const related = products.filter((item) => item.slug !== product.slug && (item.brand === product.brand || item.categories.some((category) => product.categories.includes(category)))).slice(0, 3);
-  const productSchema = { "@context": "https://schema.org", "@type": "Product", name: `${product.brand} ${product.model}`, image: product.images.map((image) => `${SITE_URL}${image}`), description: product.description, sku: product.id, mpn: product.referenceNumber, brand: { "@type": "Brand", name: product.brand }, itemCondition: product.condition === "New" ? "https://schema.org/NewCondition" : "https://schema.org/UsedCondition", offers: { "@type": "Offer", url: `${SITE_URL}/products/${product.slug}`, priceCurrency: product.currency, price: product.price, availability: product.availability === "In stock" ? "https://schema.org/InStock" : "https://schema.org/LimitedAvailability", seller: { "@type": "Organization", name: SITE_NAME } } };
+  const related = (await getCatalogProducts({ limit: 240 })).filter((item) => item.slug !== product.slug && (item.brand === product.brand || item.categories.some((category) => product.categories.includes(category)))).slice(0, 3);
+  const productSchema = { "@context": "https://schema.org", "@type": "Product", name: `${product.brand} ${product.model}`, image: product.images.map(absoluteImageUrl), description: product.description, sku: product.id, mpn: product.referenceNumber, brand: { "@type": "Brand", name: product.brand }, itemCondition: product.condition === "New" ? "https://schema.org/NewCondition" : "https://schema.org/UsedCondition", offers: { "@type": "Offer", url: `${SITE_URL}/products/${product.slug}`, priceCurrency: product.currency, price: product.price, availability: product.availability === "In stock" ? "https://schema.org/InStock" : "https://schema.org/LimitedAvailability", seller: { "@type": "Organization", name: SITE_NAME } } };
   const breadcrumbSchema = { "@context": "https://schema.org", "@type": "BreadcrumbList", itemListElement: [{ "@type": "ListItem", position: 1, name: "Home", item: SITE_URL }, { "@type": "ListItem", position: 2, name: "Shop", item: `${SITE_URL}/shop` }, { "@type": "ListItem", position: 3, name: product.brand, item: `${SITE_URL}/brands/${product.brandSlug}` }, { "@type": "ListItem", position: 4, name: product.title, item: `${SITE_URL}/products/${product.slug}` }] };
 
   return (
@@ -34,7 +39,7 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
       <div className="product-page shell">
         <Breadcrumb items={[{ label: "Home", href: "/" }, { label: "Watches", href: "/shop" }, { label: product.brand, href: `/brands/${product.brandSlug}` }, { label: product.model }]} />
         <div className="product-detail-grid">
-          <ProductGallery images={product.images} title={`${product.brand} ${product.model}`} />
+          <ProductGallery images={product.images} media={product.media} title={`${product.brand} ${product.model}`} />
           <aside className="product-summary">
             <p className="eyebrow">{product.brand}</p><h1>{product.title}</h1><p className="reference">Reference {product.referenceNumber}</p><p className="product-price">{formatPrice(product.price)}</p>
             <div className="availability"><span><i /><strong>{product.availability}</strong></span><span>Ships in 1–2 business days</span></div>

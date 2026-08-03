@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
 import { ScrollReveal } from "@/components/scroll-reveal";
+import { getCatalogBrands, getCatalogCategories } from "@/lib/catalog/repository";
 import { SITE_DESCRIPTION, SITE_NAME, SITE_URL } from "@/lib/site";
 import "./globals.css";
 
@@ -15,6 +16,7 @@ export const metadata: Metadata = {
   icons: { icon: "/icon.png", shortcut: "/icon.png", apple: "/icon.png" },
 };
 
-export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
-  return <html lang="en"><body><ScrollReveal /><SiteHeader /><main id="main-content">{children}</main><SiteFooter /></body></html>;
+export default async function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
+  const [brands, categories] = await Promise.all([getCatalogBrands(), getCatalogCategories()]);
+  return <html lang="fr"><body><ScrollReveal /><SiteHeader brands={brands} categories={categories} /><main id="main-content">{children}</main><SiteFooter brands={brands} categories={categories} /></body></html>;
 }

@@ -8,7 +8,7 @@ export function ProductCard({ product, priority = false }: { product: Product; p
   return (
     <article className="product-card">
       <Link className="product-image-wrap" href={`/products/${product.slug}`} aria-label={`View ${product.title}`}>
-        {product.featured && <span className="product-badge">Curator's pick</span>}
+        {product.featured && <span className="product-badge">Curator&apos;s pick</span>}
         <Image src={product.thumbnail} alt={`${product.brand} ${product.model} ${product.dialColor.toLowerCase()} dial watch`} fill sizes="(max-width: 700px) 85vw, (max-width: 1100px) 45vw, 28vw" priority={priority} />
         <span className="product-view">View piece <ArrowUpRight size={16} /></span>
       </Link>

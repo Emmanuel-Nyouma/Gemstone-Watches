@@ -4,6 +4,8 @@ export type Product = {
   title: string;
   brand: string;
   brandSlug: string;
+  collection?: string;
+  collectionSlug?: string;
   model: string;
   referenceNumber: string;
   price: number;
@@ -21,6 +23,7 @@ export type Product = {
   specifications: Record<string, string>;
   imageFolder: string;
   images: string[];
+  media?: ProductMedia[];
   thumbnail: string;
   tags: string[];
   categories: string[];
@@ -36,6 +39,32 @@ export type Brand = {
   origin: string;
   introduction: string;
   seoCopy: string;
+  logoUrl?: string;
+};
+
+export type WatchCollection = {
+  id: string;
+  brandSlug: string;
+  name: string;
+  slug: string;
+  description: string;
+  seoTitle?: string;
+  seoDescription?: string;
+  heroImageUrl?: string;
+};
+
+export type ProductMedia = {
+  id: string;
+  productId: string;
+  kind: "image" | "video";
+  storageKey: string;
+  publicUrl: string;
+  altText: string;
+  mimeType: string;
+  width?: number;
+  height?: number;
+  sortOrder: number;
+  isPrimary: boolean;
 };
 
 export type Category = {

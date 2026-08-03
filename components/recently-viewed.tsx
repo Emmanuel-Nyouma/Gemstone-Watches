@@ -8,8 +8,9 @@ export function RecentlyViewed({ currentSlug }: { currentSlug: string }) {
   const [slugs, setSlugs] = useState<string[]>([]);
   useEffect(() => {
     const existing = JSON.parse(localStorage.getItem("gemstone-recent") ?? "[]") as string[];
-    setSlugs(existing.filter((slug) => slug !== currentSlug).slice(0, 3));
+    const timeout = window.setTimeout(() => setSlugs(existing.filter((slug) => slug !== currentSlug).slice(0, 3)), 0);
     localStorage.setItem("gemstone-recent", JSON.stringify([currentSlug, ...existing.filter((slug) => slug !== currentSlug)].slice(0, 6)));
+    return () => window.clearTimeout(timeout);
   }, [currentSlug]);
   const recent = slugs.map((slug) => products.find((product) => product.slug === slug)).filter(Boolean);
   if (!recent.length) return null;

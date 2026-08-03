@@ -3,17 +3,20 @@ import Link from "next/link";
 import { ArrowUpRight } from "lucide-react";
 import { Breadcrumb } from "@/components/breadcrumb";
 import { StructuredData } from "@/components/structured-data";
-import { brands } from "@/data/catalog";
+import { getCatalogBrands } from "@/lib/catalog/repository";
 import { SITE_URL } from "@/lib/site";
+
+export const revalidate = 300;
 
 export const metadata: Metadata = {
   title: "Marques de montres disponibles au Cameroun",
   description: "Découvrez les marques proposées par Gemstone Watches à Douala : Rolex, Tissot, Casio, Omega, Citizen, G-SHOCK, Patek Philippe, Hublot, Fossil et plus encore.",
   alternates: { canonical: "/brands" },
-  openGraph: { title: "Nos marques de montres", description: `${brands.length} marques à découvrir chez Gemstone Watches au Cameroun.`, url: "/brands" },
+  openGraph: { title: "Nos marques de montres", description: "Découvrez toutes les marques proposées par Gemstone Watches au Cameroun.", url: "/brands" },
 };
 
-export default function BrandsPage() {
+export default async function BrandsPage() {
+  const brands = await getCatalogBrands();
   return (
     <>
       <StructuredData data={{ "@context": "https://schema.org", "@type": "BreadcrumbList", itemListElement: [{ "@type": "ListItem", position: 1, name: "Accueil", item: SITE_URL }, { "@type": "ListItem", position: 2, name: "Marques", item: `${SITE_URL}/brands` }] }} />

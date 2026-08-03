@@ -3,9 +3,9 @@
 import Link from "next/link";
 import { useState } from "react";
 import { ChevronDown, Menu, Search, ShieldCheck, X } from "lucide-react";
-import { brands, categories } from "@/data/catalog";
+import type { Brand, Category } from "@/types/product";
 
-export function SiteHeader() {
+export function SiteHeader({ brands, categories }: { brands: Brand[]; categories: Category[] }) {
   const [menuOpen, setMenuOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
 

@@ -8,7 +8,7 @@ import { Newsletter } from "@/components/newsletter";
 import { ProductCard } from "@/components/product-card";
 import { SectionHeading } from "@/components/section-heading";
 import { StructuredData } from "@/components/structured-data";
-import { brands, categories, products } from "@/data/catalog";
+import { getCatalogBrands, getCatalogCategories, getCatalogProducts } from "@/lib/catalog/repository";
 import { SITE_DESCRIPTION, SITE_NAME, SITE_URL } from "@/lib/site";
 
 export const metadata: Metadata = {
@@ -17,10 +17,11 @@ export const metadata: Metadata = {
   alternates: { canonical: "/" },
 };
 
-const featured = products.filter((product) => product.featured).slice(0, 4);
-const categoryImages = [products[2].thumbnail, products[5].thumbnail, products[1].thumbnail];
-
-export default function HomePage() {
+export default async function HomePage() {
+  const [brands, categories, products] = await Promise.all([getCatalogBrands(), getCatalogCategories(), getCatalogProducts({ limit: 48 })]);
+  const featured = products.filter((product) => product.featured).slice(0, 4);
+  const fallbackImage = products[0]?.thumbnail ?? "/og.png";
+  const categoryImages = [products[2]?.thumbnail ?? fallbackImage, products[5]?.thumbnail ?? fallbackImage, products[1]?.thumbnail ?? fallbackImage];
   return (
     <>
       <StructuredData data={[
@@ -36,7 +37,7 @@ export default function HomePage() {
       </section>
 
       <section className="editorial-section">
-        <div className="editorial-image"><Image src={products[0].thumbnail} alt="Luxury watch inspected by Gemstone Watches" fill sizes="(max-width: 800px) 100vw, 55vw" /></div>
+        <div className="editorial-image"><Image src={fallbackImage} alt="Luxury watch inspected by Gemstone Watches" fill sizes="(max-width: 800px) 100vw, 55vw" /></div>
         <div className="editorial-copy"><p className="eyebrow light">The Gemstone standard</p><h2>Confidence is<br /><em>in every detail.</em></h2><p>Every watch passes through a deliberate, hands-on assessment of condition, function and provenance. You receive transparent guidance from people who understand the difference details make.</p><Link className="button button-light" href="/about">Discover our approach</Link><div className="editorial-stat"><strong>24</strong><span>points in every<br />condition assessment</span></div></div>
       </section>
 

@@ -4,21 +4,23 @@ import { notFound } from "next/navigation";
 import { Breadcrumb } from "@/components/breadcrumb";
 import { ProductExplorer } from "@/components/product-explorer";
 import { StructuredData } from "@/components/structured-data";
-import { brands, getBrand, getBrandProducts } from "@/data/catalog";
+import { getCatalogBrand, getCatalogBrandProducts, getCatalogBrands } from "@/lib/catalog/repository";
 import { SITE_NAME, SITE_URL } from "@/lib/site";
 
-export function generateStaticParams() { return brands.map(({ slug }) => ({ slug })); }
+export const revalidate = 300;
+
+export async function generateStaticParams() { return (await getCatalogBrands()).map(({ slug }) => ({ slug })); }
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
-  const brand = getBrand((await params).slug);
+  const brand = await getCatalogBrand((await params).slug);
   if (!brand) return {};
   return { title: `Montres ${brand.name} au Cameroun`, description: `${brand.introduction} Découvrez les montres ${brand.name} proposées par ${SITE_NAME} à Douala.`, alternates: { canonical: `/brands/${brand.slug}` }, openGraph: { title: `Montres ${brand.name} au Cameroun`, description: brand.introduction, url: `/brands/${brand.slug}` } };
 }
 
 export default async function BrandPage({ params }: { params: Promise<{ slug: string }> }) {
-  const brand = getBrand((await params).slug);
+  const brand = await getCatalogBrand((await params).slug);
   if (!brand) notFound();
-  const brandProducts = getBrandProducts(brand.slug);
+  const brandProducts = await getCatalogBrandProducts(brand.slug);
   return (
     <>
       <StructuredData data={{ "@context": "https://schema.org", "@type": "BreadcrumbList", itemListElement: [{ "@type": "ListItem", position: 1, name: "Home", item: SITE_URL }, { "@type": "ListItem", position: 2, name: "Brands", item: `${SITE_URL}/shop` }, { "@type": "ListItem", position: 3, name: brand.name, item: `${SITE_URL}/brands/${brand.slug}` }] }} />

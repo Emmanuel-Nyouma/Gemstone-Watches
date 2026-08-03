@@ -1,7 +1,7 @@
 "use client";
 
 import { FormEvent, useState } from "react";
-import { Check, Copy, MessageCircle, Share2 } from "lucide-react";
+import { Check, MessageCircle, Share2 } from "lucide-react";
 import { CONTACT } from "@/lib/site";
 
 export function ProductActions({ title, reference }: { title: string; reference: string }) {

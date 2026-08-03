@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { ChevronDown, Search, SlidersHorizontal, X } from "lucide-react";
 import { ProductCard } from "./product-card";
 import type { Product } from "@/types/product";
@@ -10,8 +10,10 @@ type FilterKey = "brands" | "genders" | "movements" | "straps" | "dials" | "size
 
 const unique = (values: string[]) => [...new Set(values)].sort();
 
-export function ProductExplorer({ initialProducts, initialSearch = "", title = "The collection" }: { initialProducts: Product[]; initialSearch?: string; title?: string }) {
+export function ProductExplorer({ initialProducts, initialSearch = "", title = "The collection", remoteSearch = false }: { initialProducts: Product[]; initialSearch?: string; title?: string; remoteSearch?: boolean }) {
   const [search, setSearch] = useState(initialSearch);
+  const [catalogProducts, setCatalogProducts] = useState(initialProducts);
+  const [isSearching, setIsSearching] = useState(false);
   const [sort, setSort] = useState<Sort>("newest");
   const [maxPrice, setMaxPrice] = useState(20000);
   const [filters, setFilters] = useState<Record<FilterKey, string[]>>({ brands: [], genders: [], movements: [], straps: [], dials: [], sizes: [] });
@@ -19,14 +21,39 @@ export function ProductExplorer({ initialProducts, initialSearch = "", title = "
   const [mobileFilters, setMobileFilters] = useState(false);
   const perPage = 6;
 
+  useEffect(() => {
+    if (!remoteSearch) return;
+    const controller = new AbortController();
+    const timeout = window.setTimeout(async () => {
+      setIsSearching(true);
+      try {
+        const response = await fetch(`/api/catalog/search?q=${encodeURIComponent(search)}&limit=240`, { signal: controller.signal });
+        if (!response.ok) throw new Error("Search failed");
+        const result = await response.json() as { products: Product[] };
+        setCatalogProducts(result.products);
+        setPage(1);
+      } catch (error) {
+        if (!(error instanceof DOMException && error.name === "AbortError")) setCatalogProducts(initialProducts);
+      } finally {
+        if (!controller.signal.aborted) setIsSearching(false);
+      }
+    }, 280);
+    return () => {
+      window.clearTimeout(timeout);
+      controller.abort();
+    };
+  }, [initialProducts, remoteSearch, search]);
+
+  const availableProducts = remoteSearch ? catalogProducts : initialProducts;
+
   const options = useMemo(() => ({
-    brands: unique(initialProducts.map((product) => product.brand)),
-    genders: unique(initialProducts.map((product) => product.gender)),
-    movements: unique(initialProducts.map((product) => product.movement)),
-    straps: unique(initialProducts.map((product) => product.strap)),
-    dials: unique(initialProducts.map((product) => product.dialColor)),
-    sizes: unique(initialProducts.map((product) => String(product.caseSize))),
-  }), [initialProducts]);
+    brands: unique(availableProducts.map((product) => product.brand)),
+    genders: unique(availableProducts.map((product) => product.gender)),
+    movements: unique(availableProducts.map((product) => product.movement)),
+    straps: unique(availableProducts.map((product) => product.strap)),
+    dials: unique(availableProducts.map((product) => product.dialColor)),
+    sizes: unique(availableProducts.map((product) => String(product.caseSize))),
+  }), [availableProducts]);
 
   const toggle = (key: FilterKey, value: string) => {
     setFilters((current) => ({ ...current, [key]: current[key].includes(value) ? current[key].filter((item) => item !== value) : [...current[key], value] }));
@@ -35,8 +62,8 @@ export function ProductExplorer({ initialProducts, initialSearch = "", title = "
 
   const filtered = useMemo(() => {
     const query = search.trim().toLowerCase();
-    return initialProducts
-      .filter((product) => !query || [product.title, product.brand, product.model, product.referenceNumber, ...product.tags].join(" ").toLowerCase().includes(query))
+    return availableProducts
+      .filter((product) => remoteSearch || !query || [product.title, product.brand, product.model, product.referenceNumber, ...product.tags].join(" ").toLowerCase().includes(query))
       .filter((product) => product.price <= maxPrice)
       .filter((product) => !filters.brands.length || filters.brands.includes(product.brand))
       .filter((product) => !filters.genders.length || filters.genders.includes(product.gender))
@@ -45,7 +72,7 @@ export function ProductExplorer({ initialProducts, initialSearch = "", title = "
       .filter((product) => !filters.dials.length || filters.dials.includes(product.dialColor))
       .filter((product) => !filters.sizes.length || filters.sizes.includes(String(product.caseSize)))
       .sort((a, b) => sort === "low" ? a.price - b.price : sort === "high" ? b.price - a.price : sort === "popular" ? b.popular - a.popular : Date.parse(b.createdDate) - Date.parse(a.createdDate));
-  }, [filters, initialProducts, maxPrice, search, sort]);
+  }, [availableProducts, filters, maxPrice, remoteSearch, search, sort]);
 
   const totalPages = Math.max(1, Math.ceil(filtered.length / perPage));
   const visible = filtered.slice((page - 1) * perPage, page * perPage);
@@ -70,7 +97,7 @@ export function ProductExplorer({ initialProducts, initialSearch = "", title = "
   return (
     <section className="catalog-explorer">
       <div className="catalog-toolbar">
-        <div><p className="eyebrow">Curated inventory</p><h2>{title}</h2><span>{filtered.length} {filtered.length === 1 ? "watch" : "watches"}</span></div>
+        <div><p className="eyebrow">Curated inventory</p><h2>{title}</h2><span aria-live="polite">{isSearching ? "Recherche…" : `${filtered.length} ${filtered.length === 1 ? "montre" : "montres"}`}</span></div>
         <div className="catalog-actions">
           <label className="catalog-search"><Search size={17} /><span className="sr-only">Search watches</span><input value={search} onChange={(event) => { setSearch(event.target.value); setPage(1); }} placeholder="Search collection" /></label>
           <button className="filter-toggle" onClick={() => setMobileFilters(true)}><SlidersHorizontal size={17} /> Filters {activeCount > 0 && `(${activeCount})`}</button>
@@ -80,7 +107,7 @@ export function ProductExplorer({ initialProducts, initialSearch = "", title = "
       <div className="catalog-layout">
         {filterSidebar}
         <div className="catalog-results">
-          {visible.length ? <div className="product-grid">{visible.map((product, index) => <ProductCard key={product.id} product={product} priority={index < 2} />)}</div> : <div className="empty-state"><p className="eyebrow">No matches</p><h3>Let's widen the search.</h3><p>Try removing a filter or searching for a different reference.</p><button className="button button-dark" onClick={clear}>Reset filters</button></div>}
+          {visible.length ? <div className="product-grid">{visible.map((product, index) => <ProductCard key={product.id} product={product} priority={index < 2} />)}</div> : <div className="empty-state"><p className="eyebrow">No matches</p><h3>Let&apos;s widen the search.</h3><p>Try removing a filter or searching for a different reference.</p><button className="button button-dark" onClick={clear}>Reset filters</button></div>}
           {totalPages > 1 && <nav className="pagination" aria-label="Catalog pages"><button disabled={page === 1} onClick={() => { setPage((value) => value - 1); window.scrollTo({ top: 250, behavior: "smooth" }); }}>Previous</button>{Array.from({ length: totalPages }, (_, index) => index + 1).map((number) => <button key={number} className={page === number ? "active" : ""} aria-current={page === number ? "page" : undefined} onClick={() => { setPage(number); window.scrollTo({ top: 250, behavior: "smooth" }); }}>{number}</button>)}<button disabled={page === totalPages} onClick={() => { setPage((value) => value + 1); window.scrollTo({ top: 250, behavior: "smooth" }); }}>Next</button></nav>}
         </div>
       </div>
