@@ -26,13 +26,14 @@ test("server-renders the Gemstone Watches storefront", async () => {
 });
 
 test("ships the scalable image and SEO architecture", async () => {
-  const [catalog, generator, layout, packageJson, sitemap, imageSitemap] = await Promise.all([
+  const [catalog, generator, layout, packageJson, sitemap, imageSitemap, site] = await Promise.all([
     readFile(new URL("../data/catalog.ts", import.meta.url), "utf8"),
     readFile(new URL("../scripts/generate-image-manifest.mjs", import.meta.url), "utf8"),
     readFile(new URL("../app/layout.tsx", import.meta.url), "utf8"),
     readFile(new URL("../package.json", import.meta.url), "utf8"),
     readFile(new URL("../app/sitemap.ts", import.meta.url), "utf8"),
     readFile(new URL("../app/image-sitemap.xml/route.ts", import.meta.url), "utf8"),
+    readFile(new URL("../lib/site.ts", import.meta.url), "utf8"),
   ]);
 
   assert.match(catalog, /const withImages/);
@@ -42,6 +43,7 @@ test("ships the scalable image and SEO architecture", async () => {
   assert.match(layout, /twitter/);
   assert.match(sitemap, /products\.map/);
   assert.match(imageSitemap, /image:image/);
+  assert.match(site, /https:\/\/gemstone-watches\.vercel\.app/);
   assert.doesNotMatch(packageJson, /react-loading-skeleton/);
   await assert.rejects(access(new URL("../app/_sites-preview", import.meta.url)));
 });
