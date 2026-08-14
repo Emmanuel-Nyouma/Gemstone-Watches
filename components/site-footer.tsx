@@ -14,9 +14,9 @@ export function SiteFooter({ brands, categories }: { brands: Brand[]; categories
           <div className="footer-socials">
             <a href={SOCIAL_LINKS.whatsapp} target="_blank" rel="noreferrer" aria-label="Chat with Gemstone Watches on WhatsApp" title="WhatsApp"><FaWhatsapp /></a>
             <a href={SOCIAL_LINKS.instagram} target="_blank" rel="noreferrer" aria-label="Follow Gemstone Watches on Instagram" title="Instagram"><FaInstagram /></a>
-            <a href={SOCIAL_LINKS.facebook} target="_blank" rel="noreferrer" aria-label="Follow Gemstone Watches on Facebook" title="Facebook"><FaFacebookF /></a>
+            {SOCIAL_LINKS.facebook && <a href={SOCIAL_LINKS.facebook} target="_blank" rel="noreferrer" aria-label="Follow Gemstone Watches on Facebook" title="Facebook"><FaFacebookF /></a>}
             <a href={SOCIAL_LINKS.tiktok} target="_blank" rel="noreferrer" aria-label="Follow Gemstone Watches on TikTok" title="TikTok"><FaTiktok /></a>
-            <a href={SOCIAL_LINKS.twitter} target="_blank" rel="noreferrer" aria-label="Follow Gemstone Watches on X, formerly Twitter" title="X / Twitter"><FaXTwitter /></a>
+            {SOCIAL_LINKS.twitter && <a href={SOCIAL_LINKS.twitter} target="_blank" rel="noreferrer" aria-label="Follow Gemstone Watches on X, formerly Twitter" title="X / Twitter"><FaXTwitter /></a>}
           </div>
         </div>
         <div><h2>Collections</h2>{categories.slice(0, 5).map((category) => <Link key={category.slug} href={`/categories/${category.slug}`}>{category.name}</Link>)}</div>

@@ -9,7 +9,7 @@ import { ProductCard } from "@/components/product-card";
 import { SectionHeading } from "@/components/section-heading";
 import { StructuredData } from "@/components/structured-data";
 import { getCatalogBrands, getCatalogCategories, getCatalogProducts } from "@/lib/catalog/repository";
-import { SITE_DESCRIPTION, SITE_NAME, SITE_URL } from "@/lib/site";
+import { CONTACT, SITE_DESCRIPTION, SITE_NAME, SITE_URL, SOCIAL_LINKS } from "@/lib/site";
 
 export const metadata: Metadata = {
   title: "Luxury Watches, Curated for Collectors",
@@ -25,7 +25,7 @@ export default async function HomePage() {
   return (
     <>
       <StructuredData data={[
-        { "@context": "https://schema.org", "@type": "Organization", name: SITE_NAME, url: SITE_URL, logo: `${SITE_URL}/icon.png`, email: "concierge@gemstonewatches.com", sameAs: ["https://instagram.com"] },
+        { "@context": "https://schema.org", "@type": "Organization", name: SITE_NAME, url: SITE_URL, logo: `${SITE_URL}/icon.png`, email: CONTACT.email, sameAs: [SOCIAL_LINKS.instagram, SOCIAL_LINKS.tiktok].filter(Boolean) },
         { "@context": "https://schema.org", "@type": "WebSite", name: SITE_NAME, url: SITE_URL, description: SITE_DESCRIPTION, potentialAction: { "@type": "SearchAction", target: `${SITE_URL}/shop?q={search_term_string}`, "query-input": "required name=search_term_string" } },
       ]} />
       <HomeHero />
