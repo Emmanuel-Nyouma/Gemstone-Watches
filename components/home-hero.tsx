@@ -7,7 +7,7 @@ import { motion } from "framer-motion";
 export function HomeHero() {
   return (
     <section className="home-hero">
-      <Image className="hero-image" src="/images/citizen/series-8-skeleton/1.webp" alt="Open-worked luxury watch showing its mechanical movement" fill priority sizes="100vw" />
+      <Image className="hero-image" src="/images/hero-black-man-watch.png" alt="Main d’un homme noir portant une montre élégante" fill priority sizes="100vw" />
       <div className="hero-shade" />
       <div className="shell hero-content">
         <motion.p className="eyebrow light" initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: .55 }}>The private collection · 2026</motion.p>
