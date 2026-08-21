@@ -35,13 +35,14 @@ function requireDatabase() {
 
 export async function saveBrand(formData: FormData) {
   await requireAdmin();
-  const input = z.object({ name: z.string().min(2), slug: z.string().min(2), founded: z.string().optional(), origin: z.string(), introduction: z.string(), seoCopy: z.string() }).parse({
+  const input = z.object({ name: z.string().min(2), slug: z.string().min(2), founded: z.string().optional(), origin: z.string(), introduction: z.string(), seoCopy: z.string(), logoUrl: z.string().url().optional() }).parse({
     name: value(formData, "name"),
     slug: slugify(value(formData, "slug") || value(formData, "name")),
     founded: value(formData, "founded") || undefined,
     origin: value(formData, "origin"),
     introduction: value(formData, "introduction"),
     seoCopy: value(formData, "seoCopy"),
+    logoUrl: value(formData, "logoUrl") || undefined,
   });
   await requireDatabase().insert(brandsTable).values(input).onConflictDoUpdate({ target: brandsTable.slug, set: { ...input, updatedAt: new Date() } });
   revalidatePath("/admin/brands");
@@ -80,10 +81,11 @@ export async function saveCategory(formData: FormData) {
 export async function saveProduct(formData: FormData) {
   await requireAdmin();
   const rawTags = value(formData, "tags");
+  const rawComplications = formData.getAll("complications").map(String).map((item) => item.trim()).filter(Boolean);
   const input = z.object({
     id: z.string().min(3), brandId: z.string().uuid(), collectionId: z.string().uuid().optional(), slug: z.string().min(2), title: z.string().min(2), model: z.string().min(1), referenceNumber: z.string(),
     price: z.string(), condition: z.enum(["New", "Unworn", "Excellent"]), availability: z.enum(["In stock", "Limited availability", "Available to order"]), movement: z.enum(["Automatic", "Manual", "Quartz"]),
-    caseMaterial: z.string(), caseSize: z.string(), dialColor: z.string(), strap: z.string(), waterResistance: z.string(), gender: z.enum(["Men", "Women", "Unisex"]), description: z.string(), tags: z.array(z.string()), featured: z.boolean(), published: z.boolean(),
+    caseMaterial: z.string(), caseSize: z.string(), dialColor: z.string(), strap: z.string(), waterResistance: z.string(), gender: z.enum(["Men", "Women", "Unisex"]), description: z.string(), tags: z.array(z.string()), complications: z.array(z.string()), powerSource: z.enum(["mechanical", "battery"]), featured: z.boolean(), published: z.boolean(),
   }).parse({
     id: value(formData, "id") || `gw-${randomUUID().slice(0, 8)}`,
     brandId: value(formData, "brandId"),
@@ -92,18 +94,23 @@ export async function saveProduct(formData: FormData) {
     title: value(formData, "title"), model: value(formData, "model"), referenceNumber: value(formData, "referenceNumber"), price: value(formData, "price") || "0",
     condition: value(formData, "condition"), availability: value(formData, "availability"), movement: value(formData, "movement"), caseMaterial: value(formData, "caseMaterial"), caseSize: value(formData, "caseSize") || "0",
     dialColor: value(formData, "dialColor"), strap: value(formData, "strap"), waterResistance: value(formData, "waterResistance"), gender: value(formData, "gender"), description: value(formData, "description"),
-    tags: rawTags.split(",").map((tag) => tag.trim()).filter(Boolean), featured: formData.get("featured") === "on", published: formData.get("published") === "on",
+    tags: rawTags.split(",").map((tag) => tag.trim()).filter(Boolean), complications: rawComplications, powerSource: value(formData, "powerSource") || (value(formData, "movement") === "Quartz" ? "battery" : "mechanical"), featured: formData.get("featured") === "on", published: formData.get("published") === "on",
   });
   const database = requireDatabase();
-  await database.insert(productsTable).values(input).onConflictDoUpdate({ target: productsTable.id, set: { ...input, updatedAt: new Date() } });
+  const [existing] = await database.select({ specifications: productsTable.specifications }).from(productsTable).where(eq(productsTable.id, input.id)).limit(1);
+  const movement: "Automatic" | "Manual" | "Quartz" = input.powerSource === "battery" ? "Quartz" : input.movement === "Quartz" ? "Automatic" : input.movement;
+  const specifications = { ...(existing?.specifications ?? {}), "Power source": input.powerSource === "battery" ? "Battery / quartz" : "Mechanical", Complications: input.complications.length ? input.complications.join(", ") : "None" };
+  const { powerSource: _powerSource, complications: _complications, ...persistedInput } = input;
+  const productInput: typeof productsTable.$inferInsert = { ...persistedInput, movement, specifications };
+  await database.insert(productsTable).values(productInput).onConflictDoUpdate({ target: productsTable.id, set: { ...productInput, updatedAt: new Date() } });
   const categoryIds = formData.getAll("categoryIds").map(String).filter(Boolean);
-  await database.delete(productCategoriesTable).where(eq(productCategoriesTable.productId, input.id));
-  if (categoryIds.length) await database.insert(productCategoriesTable).values(categoryIds.map((categoryId) => ({ productId: input.id, categoryId })));
-  await database.delete(searchAliasesTable).where(eq(searchAliasesTable.productId, input.id));
-  if (input.tags.length) await database.insert(searchAliasesTable).values(input.tags.map((alias) => ({ productId: input.id, alias, normalizedAlias: slugify(alias).replace(/-/g, " ") })));
+  await database.delete(productCategoriesTable).where(eq(productCategoriesTable.productId, productInput.id));
+  if (categoryIds.length) await database.insert(productCategoriesTable).values(categoryIds.map((categoryId) => ({ productId: productInput.id, categoryId })));
+  await database.delete(searchAliasesTable).where(eq(searchAliasesTable.productId, productInput.id));
+  if (input.tags.length) await database.insert(searchAliasesTable).values(input.tags.map((alias) => ({ productId: productInput.id, alias, normalizedAlias: slugify(alias).replace(/-/g, " ") })));
   revalidatePath("/admin/products");
   revalidatePath("/shop");
-  revalidatePath(`/products/${input.slug}`);
+  revalidatePath(`/products/${productInput.slug}`);
 }
 
 export async function seedBundledCatalog() {

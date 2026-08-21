@@ -5,9 +5,14 @@ import { getAdminSession } from "@/lib/admin-auth";
 import { createProductMediaUpload, isR2Configured } from "@/lib/r2";
 
 const requestSchema = z.object({
-  productSlug: z.string().regex(/^[a-z0-9-]+$/),
+  productSlug: z.string().regex(/^[a-z0-9-]+$/).optional(),
+  brandSlug: z.string().regex(/^[a-z0-9-]+$/).optional(),
+  scope: z.enum(["product", "brand"]).default("product"),
   contentType: z.string().regex(/^(image\/(jpeg|png|webp|avif)|video\/(mp4|webm))$/),
   fileName: z.string().trim().min(1).max(180).optional(),
+}).superRefine((value, context) => {
+  if (value.scope === "product" && !value.productSlug) context.addIssue({ code: "custom", path: ["productSlug"], message: "Product slug is required" });
+  if (value.scope === "brand" && !value.brandSlug) context.addIssue({ code: "custom", path: ["brandSlug"], message: "Brand slug is required" });
 });
 
 const slugifyFileName = (value: string) => value
@@ -27,6 +32,7 @@ export async function POST(request: Request) {
 
   const extension = parsed.data.contentType === "image/webp" ? "webp" : parsed.data.contentType.split("/")[1];
   const descriptiveName = slugifyFileName(parsed.data.fileName ?? "watch-image");
-  const key = `products/${parsed.data.productSlug}/${descriptiveName}-${randomUUID().slice(0, 8)}.${extension}`;
+  const folder = parsed.data.scope === "brand" ? `brands/${parsed.data.brandSlug}` : `products/${parsed.data.productSlug}`;
+  const key = `${folder}/${descriptiveName}-${randomUUID().slice(0, 8)}.${extension}`;
   return NextResponse.json(await createProductMediaUpload({ key, contentType: parsed.data.contentType }));
 }

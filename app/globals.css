@@ -312,6 +312,9 @@ h1 em, h2 em { color: var(--gold); font-weight: 400; }
 .brand-directory-card > span { color: #aaa79f; font-size: 9px; }
 .brand-directory-card > svg { width: 17px; color: var(--gold-dark); transition: transform .3s ease; }
 .brand-directory-card > div { grid-column: 1 / -1; align-self: end; }
+.brand-directory-card-image { position: relative; width: 82px; height: 48px; margin: 10px 0 4px; align-self: start !important; }
+.brand-directory-card-image img { object-fit: contain; object-position: left center; filter: saturate(.85); }
+.brand-directory-card-description { margin-top: 8px !important; max-width: 260px; text-transform: none !important; line-height: 1.5; }
 .brand-directory-card h3 { margin: 0 0 3px; font-family: var(--serif); font-size: 24px; font-weight: 400; }
 .brand-directory-card p { margin: 0; color: #89867f; font-size: 9px; text-transform: uppercase; }
 .brand-directory-card:hover { color: #fff; background: #111; }
@@ -623,6 +626,19 @@ body:has(.admin-root) #main-content { min-height: 100vh; }
 .admin-checks { display: flex; flex-wrap: wrap; gap: 24px; }
 .admin-checks label { display: flex; align-items: center; gap: 9px; }
 .admin-checks input { width: 18px; min-height: 18px; }
+.admin-checks-dense { gap: 12px 22px; }
+.admin-form fieldset { display: grid; gap: 12px; border: 1px solid #d8d0c2; padding: 15px; }
+.admin-form fieldset legend { padding: 0 6px; color: #4b4841; font-size: 12px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; }
+.admin-form fieldset small { color: #89867f; font-size: 12px; }
+.brand-logo-uploader { display: grid; gap: 10px; }
+.brand-logo-uploader > label { position: relative; display: grid; grid-template-columns: auto 1fr; gap: 3px 10px; padding: 15px; border: 1px dashed #cfc7b8; cursor: pointer; }
+.brand-logo-uploader > label svg { grid-row: span 2; width: 22px; color: var(--gold-dark); }
+.brand-logo-uploader > label span { color: #89867f; font-size: 12px; font-weight: 400; letter-spacing: normal; text-transform: none; }
+.brand-logo-uploader > label input[type=file] { position: absolute; inset: 0; opacity: 0; cursor: pointer; }
+.brand-logo-preview { width: 120px; height: 64px; object-fit: contain; border: 1px solid #e2ddd4; background: #fff; padding: 7px; }
+.brand-logo-uploader > p { margin: 0; color: #6d5b35; font-size: 12px; }
+.admin-list-meta { display: flex; align-items: center; gap: 12px; }
+.admin-list-meta img { width: 54px; height: 32px; object-fit: contain; }
 .admin-list { display: grid; }
 .admin-list article { display: flex; align-items: center; justify-content: space-between; gap: 18px; padding: 15px 0; border-bottom: 1px solid #e4dfd5; }
 .admin-list article > div { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; }

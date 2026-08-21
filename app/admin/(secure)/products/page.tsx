@@ -2,6 +2,8 @@ import Link from "next/link";
 import { getAdminBrands, getAdminCategories, getAdminCollections, getAdminProducts } from "@/lib/catalog/repository";
 import { saveProduct } from "../../actions";
 
+const complicationOptions = ["Date / calendrier", "Chronographe", "Phase de lune", "GMT / double fuseau", "Réserve de marche", "Calendrier annuel", "Calendrier perpétuel", "Tourbillon", "Répétition minutes", "Alarme", "Heure universelle", "Flyback", "Rattrapante", "Affichage rétrograde", "Grande date", "Petite seconde"];
+
 export default async function AdminProductsPage() {
   const [brands, categories, collections, productRows] = await Promise.all([getAdminBrands(), getAdminCategories(), getAdminCollections(), getAdminProducts()]);
 
@@ -21,6 +23,8 @@ export default async function AdminProductsPage() {
         <div className="admin-field-row"><label>Slug<input name="slug" placeholder="généré depuis le titre" /></label><label>Prix USD<input name="price" type="number" min="0" step="0.01" required /></label></div>
         <div className="admin-field-row"><label>État<select name="condition" defaultValue="New"><option>New</option><option>Unworn</option><option>Excellent</option></select></label><label>Disponibilité<select name="availability" defaultValue="In stock"><option>In stock</option><option>Limited availability</option><option>Available to order</option></select></label></div>
         <div className="admin-field-row admin-field-row-3"><label>Mouvement<select name="movement" defaultValue="Automatic"><option>Automatic</option><option>Manual</option><option>Quartz</option></select></label><label>Genre<select name="gender" defaultValue="Unisex"><option>Men</option><option>Women</option><option>Unisex</option></select></label><label>Taille du boîtier<input name="caseSize" type="number" min="0" step="0.1" /></label></div>
+        <fieldset><legend>Alimentation</legend><div className="admin-checks"><label><input type="radio" name="powerSource" value="mechanical" defaultChecked /> Mécanique</label><label><input type="radio" name="powerSource" value="battery" /> À pile / quartz</label></div><small>Le mouvement Automatic ou Manual est mécanique.</small></fieldset>
+        <fieldset><legend>Complications</legend><div className="admin-checks admin-checks-dense">{complicationOptions.map((complication) => <label key={complication}><input name="complications" type="checkbox" value={complication} /> {complication}</label>)}</div></fieldset>
         <div className="admin-field-row"><label>Matériau du boîtier<input name="caseMaterial" /></label><label>Couleur du cadran<input name="dialColor" /></label></div>
         <div className="admin-field-row"><label>Bracelet<input name="strap" /></label><label>Étanchéité<input name="waterResistance" /></label></div>
         <label>Description<textarea name="description" rows={7} /></label>
