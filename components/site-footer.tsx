@@ -21,7 +21,7 @@ export function SiteFooter({ brands, categories }: { brands: Brand[]; categories
         </div>
         <div><h2>Collections</h2>{categories.slice(0, 5).map((category) => <Link key={category.slug} href={`/categories/${category.slug}`}>{category.name}</Link>)}</div>
         <div><h2>Maisons horlogères</h2>{brands.slice(0, 4).map((brand) => <Link key={brand.slug} href={`/brands/${brand.slug}`}>{brand.name}</Link>)}<Link href="/brands">Toutes les marques</Link></div>
-        <div><h2>Service client</h2><Link href="/about">À propos</Link><Link href="/contact">Contact</Link><Link href="/contact#authenticity">Authenticité</Link><Link href="/contact#delivery">Livraison & retours</Link><a href={`mailto:${CONTACT.email}`}>{CONTACT.email}</a></div>
+        <div><h2>Service client</h2><Link href="/about">À propos</Link><Link href="/contact">Contact</Link><Link href="/faq">FAQ</Link><Link href="/livraison">Livraison au Cameroun</Link><Link href="/contact#authenticity">Authenticité</Link><Link href="/contact#delivery">Livraison & retours</Link><a href={`mailto:${CONTACT.email}`}>{CONTACT.email}</a></div>
       </div>
       <div className="shell footer-bottom">
         <p>© {new Date().getFullYear()} Gemstone Watches. Tous droits réservés.</p>

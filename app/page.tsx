@@ -12,8 +12,8 @@ import { getCatalogBrands, getCatalogCategories, getCatalogProducts } from "@/li
 import { CONTACT, SITE_DESCRIPTION, SITE_NAME, SITE_URL, SOCIAL_LINKS } from "@/lib/site";
 
 export const metadata: Metadata = {
-  title: "Luxury Watches, Curated for Collectors",
-  description: "Discover authenticated Rolex, Omega, Tudor, Cartier and fine watches selected by Gemstone Watches for condition, character and enduring value.",
+  title: "Boutique de montres à Douala, Cameroun",
+  description: "Découvrez les montres pour hommes et femmes proposées par Gemstone Watches à Douala : montres classiques, sportives, automatiques et de marque, avec livraison au Cameroun.",
   alternates: { canonical: "/" },
 };
 
@@ -25,20 +25,21 @@ export default async function HomePage() {
   return (
     <>
       <StructuredData data={[
-        { "@context": "https://schema.org", "@type": "Organization", name: SITE_NAME, url: SITE_URL, logo: `${SITE_URL}/icon.png`, email: CONTACT.email, sameAs: [SOCIAL_LINKS.instagram, SOCIAL_LINKS.tiktok].filter(Boolean) },
+        { "@context": "https://schema.org", "@type": "Organization", name: SITE_NAME, url: SITE_URL, logo: `${SITE_URL}/icon.png`, email: CONTACT.email, telephone: CONTACT.phone, sameAs: [SOCIAL_LINKS.instagram, SOCIAL_LINKS.tiktok].filter(Boolean) },
+        { "@context": "https://schema.org", "@type": "LocalBusiness", name: SITE_NAME, url: SITE_URL, telephone: CONTACT.phone, email: CONTACT.email, address: { "@type": "PostalAddress", streetAddress: CONTACT.address, addressLocality: "Douala", addressCountry: "CM" }, openingHours: ["Mo-Sa 10:00-17:00", "Su 10:00-13:00"], areaServed: ["Douala", "Yaoundé", "Cameroun"] },
         { "@context": "https://schema.org", "@type": "WebSite", name: SITE_NAME, url: SITE_URL, description: SITE_DESCRIPTION, potentialAction: { "@type": "SearchAction", target: `${SITE_URL}/shop?q={search_term_string}`, "query-input": "required name=search_term_string" } },
       ]} />
       <HomeHero />
       <section className="brand-ribbon" aria-label="Featured watchmakers"><div className="shell">{brands.slice(0, 6).map((brand) => <Link key={brand.slug} href={`/brands/${brand.slug}`}>{brand.name}</Link>)}</div></section>
 
       <section className="section shell">
-        <SectionHeading eyebrow="New & noteworthy" title="Objects of lasting significance." copy="A considered edit of modern icons and future heirlooms, each chosen for the quality of its design and condition." link="/shop" linkLabel="Explore all watches" />
+        <SectionHeading eyebrow="Nouveautés et incontournables" title="Des montres pour chaque moment." copy="Une sélection de montres classiques, sportives, automatiques et contemporaines, présentées avec des informations claires." link="/shop" linkLabel="Voir toutes les montres" />
         <div className="product-grid home-products">{featured.map((product, index) => <ProductCard key={product.id} product={product} priority={index < 2} />)}</div>
       </section>
 
       <section className="editorial-section">
         <div className="editorial-image"><Image src={fallbackImage} alt="Luxury watch inspected by Gemstone Watches" fill sizes="(max-width: 800px) 100vw, 55vw" /></div>
-        <div className="editorial-copy"><p className="eyebrow light">The Gemstone standard</p><h2>Confidence is<br /><em>in every detail.</em></h2><p>Every watch passes through a deliberate, hands-on assessment of condition, function and provenance. You receive transparent guidance from people who understand the difference details make.</p><Link className="button button-light" href="/about">Discover our approach</Link><div className="editorial-stat"><strong>24</strong><span>points in every<br />condition assessment</span></div></div>
+        <div className="editorial-copy"><p className="eyebrow light">L’approche Gemstone</p><h2>La confiance est<br /><em>dans chaque détail.</em></h2><p>Chaque montre est présentée avec les informations disponibles sur son état, son mouvement et ses caractéristiques. Notre équipe vous accompagne dans votre choix.</p><Link className="button button-light" href="/about">Découvrir notre approche</Link></div>
       </section>
 
       <section className="section shell">
@@ -48,10 +49,10 @@ export default async function HomePage() {
 
       <section className="trust-section">
         <div className="shell trust-grid">
-          <div><ShieldCheck /><h3>Independently authenticated</h3><p>Specialist-led examination of identity, movement and condition.</p></div>
-          <div><Award /><h3>12-month warranty</h3><p>Every mechanical watch is covered by our limited warranty.</p></div>
-          <div><Gem /><h3>Insured worldwide delivery</h3><p>Discreet packaging and fully insured transport to your door.</p></div>
-          <div><RefreshCcw /><h3>14-day returns</h3><p>Time to consider your watch in the comfort of your home.</p></div>
+          <div><ShieldCheck /><h3>Informations transparentes</h3><p>Des fiches détaillées pour vous aider à comparer les modèles.</p></div>
+          <div><Award /><h3>Une sélection variée</h3><p>Des montres pour hommes et femmes, de styles et budgets différents.</p></div>
+          <div><Gem /><h3>Livraison au Cameroun</h3><p>Livraison à Douala, Yaoundé et dans les autres villes du pays.</p></div>
+          <div><RefreshCcw /><h3>Service client WhatsApp</h3><p>Contactez-nous pour vérifier une disponibilité ou organiser une commande.</p></div>
         </div>
       </section>
 

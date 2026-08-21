@@ -637,6 +637,16 @@ body:has(.admin-root) #main-content { min-height: 100vh; }
 .brand-logo-uploader > label input[type=file] { position: absolute; inset: 0; opacity: 0; cursor: pointer; }
 .brand-logo-preview { width: 120px; height: 64px; object-fit: contain; border: 1px solid #e2ddd4; background: #fff; padding: 7px; }
 .brand-logo-uploader > p { margin: 0; color: #6d5b35; font-size: 12px; }
+.seo-page { padding-top: 64px; padding-bottom: 96px; max-width: 920px; }
+.seo-page h1 { max-width: 760px; margin: 12px 0 24px; font-family: var(--serif); font-size: clamp(42px, 7vw, 78px); font-weight: 400; line-height: .98; }
+.seo-lead { max-width: 720px; margin-bottom: 56px; color: #5f5b53; font-size: 20px; line-height: 1.65; }
+.seo-page section { max-width: 720px; padding: 28px 0; border-top: 1px solid #d8d5cd; }
+.seo-page section h2 { margin: 0 0 12px; font-family: var(--serif); font-size: 30px; font-weight: 400; }
+.seo-page section p { color: #5f5b53; line-height: 1.75; }
+.faq-list { max-width: 760px; margin-bottom: 42px; border-top: 1px solid #d8d5cd; }
+.faq-list details { padding: 20px 0; border-bottom: 1px solid #d8d5cd; }
+.faq-list summary { cursor: pointer; font-family: var(--serif); font-size: 23px; }
+.faq-list p { max-width: 680px; margin: 13px 0 0; color: #5f5b53; line-height: 1.7; }
 .admin-list-meta { display: flex; align-items: center; gap: 12px; }
 .admin-list-meta img { width: 54px; height: 32px; object-fit: contain; }
 .brand-search-select { position: relative; }

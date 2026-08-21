@@ -1,6 +1,6 @@
 export const SITE_NAME = "Gemstone Watches";
 export const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://gemstone-watches.vercel.app";
-export const SITE_DESCRIPTION = "Curated luxury watches, authenticated with care and presented with complete, transparent detail.";
+export const SITE_DESCRIPTION = "Boutique de montres à Douala, Cameroun : montres pour hommes et femmes, sélection de marques, livraison au Cameroun et expédition internationale.";
 export const CONTACT = {
   email: "njeemmanuelulrich@gmail.com",
   phone: "+237 659 178 587",

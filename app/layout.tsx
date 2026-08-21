@@ -9,10 +9,10 @@ import "./globals.css";
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
-  title: { default: `${SITE_NAME} | Exceptional Watches, Personally Selected`, template: `%s | ${SITE_NAME}` },
+  title: { default: `${SITE_NAME} | Boutique de montres à Douala`, template: `%s | ${SITE_NAME}` },
   description: SITE_DESCRIPTION,
   alternates: { canonical: "/" },
-  openGraph: { type: "website", siteName: SITE_NAME, title: SITE_NAME, description: SITE_DESCRIPTION, url: "/", images: [{ url: "/og.png", width: 1200, height: 630, alt: "Gemstone Watches luxury watch collection" }] },
+  openGraph: { type: "website", siteName: SITE_NAME, title: SITE_NAME, description: SITE_DESCRIPTION, url: "/", locale: "fr_CM", images: [{ url: "/og.png", width: 1200, height: 630, alt: "Collection de montres Gemstone Watches" }] },
   twitter: { card: "summary_large_image", title: SITE_NAME, description: SITE_DESCRIPTION, images: ["/og.png"] },
   icons: { icon: "/icon.png", shortcut: "/icon.png", apple: "/icon.png" },
 };
