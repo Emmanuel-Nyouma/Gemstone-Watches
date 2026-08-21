@@ -81,7 +81,7 @@ export const productsTable = pgTable("products", {
   model: text("model").notNull(),
   referenceNumber: text("reference_number").default("").notNull(),
   price: numeric("price", { precision: 12, scale: 2 }).default("0").notNull(),
-  currency: text("currency").default("USD").notNull(),
+  currency: text("currency").default("XAF").notNull(),
   condition: productCondition("condition").default("New").notNull(),
   availability: productAvailability("availability").default("In stock").notNull(),
   movement: productMovement("movement").default("Automatic").notNull(),

@@ -104,7 +104,7 @@ async function hydrateProducts(rows: ProductRow[]): Promise<Product[]> {
       model: product.model,
       referenceNumber: product.referenceNumber,
       price: Number(product.price),
-      currency: "USD",
+      currency: "XAF",
       condition: product.condition,
       availability: product.availability,
       movement: product.movement,

@@ -83,7 +83,7 @@ export function ProductExplorer({ initialProducts, initialSearch = "", title = "
     <aside className={`filter-sidebar ${mobileFilters ? "is-open" : ""}`} aria-label="Watch filters">
       <div className="filter-mobile-head"><strong>Filters {activeCount > 0 && `(${activeCount})`}</strong><button onClick={() => setMobileFilters(false)} aria-label="Close filters"><X /></button></div>
       <FilterGroup label="Brand" values={options.brands} selected={filters.brands} onToggle={(value) => toggle("brands", value)} />
-      <details className="filter-group" open><summary>Price <ChevronDown size={15} /></summary><div className="price-filter"><div><span>$0</span><strong>Up to ${maxPrice.toLocaleString()}</strong></div><input type="range" min="500" max="20000" step="500" value={maxPrice} onChange={(event) => { setMaxPrice(Number(event.target.value)); setPage(1); }} aria-label="Maximum price" /></div></details>
+      <details className="filter-group" open><summary>Prix <ChevronDown size={15} /></summary><div className="price-filter"><div><span>0 FCFA</span><strong>Jusqu’à {maxPrice.toLocaleString("fr-FR")} FCFA</strong></div><input type="range" min="500" max="20000000" step="50000" value={maxPrice} onChange={(event) => { setMaxPrice(Number(event.target.value)); setPage(1); }} aria-label="Prix maximum en FCFA" /></div></details>
       <FilterGroup label="Gender" values={options.genders} selected={filters.genders} onToggle={(value) => toggle("genders", value)} />
       <FilterGroup label="Movement" values={options.movements} selected={filters.movements} onToggle={(value) => toggle("movements", value)} />
       <FilterGroup label="Strap material" values={options.straps} selected={filters.straps} onToggle={(value) => toggle("straps", value)} />

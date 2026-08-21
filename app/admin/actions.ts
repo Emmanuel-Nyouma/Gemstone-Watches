@@ -84,14 +84,14 @@ export async function saveProduct(formData: FormData) {
   const rawComplications = formData.getAll("complications").map(String).map((item) => item.trim()).filter(Boolean);
   const input = z.object({
     id: z.string().min(3), brandId: z.string().uuid(), collectionId: z.string().uuid().optional(), slug: z.string().min(2), title: z.string().min(2), model: z.string().min(1), referenceNumber: z.string(),
-    price: z.string(), condition: z.enum(["New", "Unworn", "Excellent"]), availability: z.enum(["In stock", "Limited availability", "Available to order"]), movement: z.enum(["Automatic", "Manual", "Quartz"]),
+    price: z.string(), currency: z.literal("XAF"), condition: z.enum(["New", "Unworn", "Excellent"]), availability: z.enum(["In stock", "Limited availability", "Available to order"]), movement: z.enum(["Automatic", "Manual", "Quartz"]),
     caseMaterial: z.string(), caseSize: z.string(), dialColor: z.string(), strap: z.string(), waterResistance: z.string(), gender: z.enum(["Men", "Women", "Unisex"]), description: z.string(), tags: z.array(z.string()), complications: z.array(z.string()), powerSource: z.enum(["mechanical", "battery"]), featured: z.boolean(), published: z.boolean(),
   }).parse({
     id: value(formData, "id") || `gw-${randomUUID().slice(0, 8)}`,
     brandId: value(formData, "brandId"),
     collectionId: value(formData, "collectionId") || undefined,
     slug: slugify(value(formData, "slug") || `${value(formData, "brandName")} ${value(formData, "title")}`),
-    title: value(formData, "title"), model: value(formData, "model"), referenceNumber: value(formData, "referenceNumber"), price: value(formData, "price") || "0",
+    title: value(formData, "title"), model: value(formData, "model"), referenceNumber: value(formData, "referenceNumber"), price: value(formData, "price") || "0", currency: "XAF",
     condition: value(formData, "condition"), availability: value(formData, "availability"), movement: value(formData, "movement"), caseMaterial: value(formData, "caseMaterial"), caseSize: value(formData, "caseSize") || "0",
     dialColor: value(formData, "dialColor"), strap: value(formData, "strap"), waterResistance: value(formData, "waterResistance"), gender: value(formData, "gender"), description: value(formData, "description"),
     tags: rawTags.split(",").map((tag) => tag.trim()).filter(Boolean), complications: rawComplications, powerSource: value(formData, "powerSource") || (value(formData, "movement") === "Quartz" ? "battery" : "mechanical"), featured: formData.get("featured") === "on", published: formData.get("published") === "on",
@@ -141,7 +141,7 @@ export async function seedBundledCatalog() {
       model: product.model,
       referenceNumber: product.referenceNumber,
       price: String(product.price),
-      currency: product.currency,
+      currency: "XAF",
       condition: product.condition,
       availability: product.availability,
       movement: product.movement,

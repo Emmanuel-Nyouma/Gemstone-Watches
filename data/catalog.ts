@@ -174,4 +174,4 @@ export const getBrand = (slug: string) => brands.find((brand) => brand.slug === 
 export const getCategory = (slug: string) => categories.find((category) => category.slug === slug);
 export const getBrandProducts = (slug: string) => products.filter((product) => product.brandSlug === slug);
 export const getCategoryProducts = (slug: string) => products.filter((product) => product.categories.includes(slug));
-export const formatPrice = (price: number, currency = "USD") => new Intl.NumberFormat("en-US", { style: "currency", currency, maximumFractionDigits: 0 }).format(price);
+export const formatPrice = (price: number, _currency = "XAF") => new Intl.NumberFormat("fr-CM", { style: "currency", currency: "XAF", maximumFractionDigits: 0 }).format(price);

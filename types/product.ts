@@ -9,7 +9,7 @@ export type Product = {
   model: string;
   referenceNumber: string;
   price: number;
-  currency: "USD";
+  currency: "USD" | "XAF";
   condition: "New" | "Unworn" | "Excellent";
   availability: "In stock" | "Limited availability" | "Available to order";
   movement: "Automatic" | "Manual" | "Quartz";
