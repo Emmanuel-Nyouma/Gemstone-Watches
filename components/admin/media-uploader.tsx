@@ -25,6 +25,7 @@ async function prepareMedia(file: File): Promise<PreparedMedia> {
 export function MediaUploader({ productId, productSlug, defaultAlt }: { productId: string; productSlug: string; defaultAlt: string }) {
   const [status, setStatus] = useState("");
   const [busy, setBusy] = useState(false);
+  const [altText, setAltText] = useState(defaultAlt);
 
   const upload = async (file: File) => {
     setBusy(true);
@@ -32,13 +33,13 @@ export function MediaUploader({ productId, productSlug, defaultAlt }: { productI
     try {
       const media = await prepareMedia(file);
       setStatus(media.kind === "image" ? "Envoi de l’image WebP vers R2…" : "Envoi de la vidéo vers R2…");
-      const presignResponse = await fetch("/api/admin/uploads/presign", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ productSlug, contentType: media.contentType }) });
+      const presignResponse = await fetch("/api/admin/uploads/presign", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ productSlug, contentType: media.contentType, fileName: file.name }) });
       const presign = await presignResponse.json();
       if (!presignResponse.ok) throw new Error(presign.error ?? "Unable to prepare upload");
       const uploadResponse = await fetch(presign.uploadUrl, { method: "PUT", headers: { "Content-Type": media.contentType }, body: media.blob });
       if (!uploadResponse.ok) throw new Error(`R2 upload failed (${uploadResponse.status})`);
       setStatus("Enregistrement dans le catalogue…");
-      const recordResponse = await fetch("/api/admin/media", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ productId, kind: media.kind, storageKey: new URL(presign.publicUrl).pathname.replace(/^\//, ""), publicUrl: presign.publicUrl, altText: defaultAlt, mimeType: media.contentType, width: media.width, height: media.height, isPrimary: false }) });
+      const recordResponse = await fetch("/api/admin/media", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ productId, kind: media.kind, storageKey: new URL(presign.publicUrl).pathname.replace(/^\//, ""), publicUrl: presign.publicUrl, altText: altText.trim() || defaultAlt, mimeType: media.contentType, width: media.width, height: media.height, isPrimary: false }) });
       if (!recordResponse.ok) throw new Error("The file was uploaded but its catalog record could not be saved");
       setStatus("Média ajouté avec succès.");
       window.location.reload();
@@ -49,5 +50,5 @@ export function MediaUploader({ productId, productSlug, defaultAlt }: { productI
     }
   };
 
-  return <div className="media-uploader"><label className={busy ? "is-busy" : ""}><UploadCloud /><strong>{busy ? "Envoi en cours…" : "Ajouter des images ou vidéos"}</strong><span>Images converties en WebP · JPG, PNG, WebP, AVIF, MP4 ou WebM</span><input type="file" accept="image/jpeg,image/png,image/webp,image/avif,video/mp4,video/webm" multiple disabled={busy} onChange={async (event) => { for (const file of Array.from(event.target.files ?? [])) await upload(file); }} /></label>{status && <p>{status}</p>}</div>;
+  return <div className="media-uploader"><label className="admin-media-alt"><span>Texte descriptif de l’image (important pour Google Images)</span><input value={altText} onChange={(event) => setAltText(event.target.value)} maxLength={300} disabled={busy} aria-label="Texte descriptif de l’image" /></label><label className={busy ? "is-busy" : ""}><UploadCloud /><strong>{busy ? "Envoi en cours…" : "Ajouter depuis le téléphone"}</strong><span>Choisis plusieurs photos ou prends une photo avec l’appareil · conversion WebP automatique</span><input type="file" accept="image/jpeg,image/png,image/webp,image/avif,video/mp4,video/webm" capture="environment" multiple disabled={busy} onChange={async (event) => { for (const file of Array.from(event.target.files ?? [])) await upload(file); event.currentTarget.value = ""; }} /></label>{status && <p>{status}</p>}</div>;
 }
