@@ -91,8 +91,8 @@ export async function saveProduct(formData: FormData) {
     brandId: value(formData, "brandId"),
     collectionId: value(formData, "collectionId") || undefined,
     slug: slugify(value(formData, "slug") || `${value(formData, "brandName")} ${value(formData, "title")}`),
-    title: value(formData, "title"), model: value(formData, "model"), referenceNumber: value(formData, "referenceNumber"), price: value(formData, "price") || "0", currency: "XAF",
-    condition: value(formData, "condition"), availability: value(formData, "availability"), movement: value(formData, "movement"), caseMaterial: value(formData, "caseMaterial"), caseSize: value(formData, "caseSize") || "0",
+    title: value(formData, "title"), model: value(formData, "model") || value(formData, "title"), referenceNumber: value(formData, "referenceNumber"), price: value(formData, "price") || "0", currency: "XAF",
+    condition: value(formData, "condition") || "New", availability: value(formData, "availability"), movement: value(formData, "movement"), caseMaterial: value(formData, "caseMaterial"), caseSize: value(formData, "caseSize") || "0",
     dialColor: value(formData, "dialColor"), strap: value(formData, "strap"), waterResistance: value(formData, "waterResistance"), gender: value(formData, "gender"), description: value(formData, "description"),
     tags: rawTags.split(",").map((tag) => tag.trim()).filter(Boolean), complications: rawComplications, powerSource: value(formData, "powerSource") || (value(formData, "movement") === "Quartz" ? "battery" : "mechanical"), featured: formData.get("featured") === "on", published: formData.get("published") === "on",
   });

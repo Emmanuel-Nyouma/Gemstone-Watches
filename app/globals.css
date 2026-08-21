@@ -639,6 +639,12 @@ body:has(.admin-root) #main-content { min-height: 100vh; }
 .brand-logo-uploader > p { margin: 0; color: #6d5b35; font-size: 12px; }
 .admin-list-meta { display: flex; align-items: center; gap: 12px; }
 .admin-list-meta img { width: 54px; height: 32px; object-fit: contain; }
+.brand-search-select { position: relative; }
+.brand-search-results { position: absolute; z-index: 5; top: calc(100% + 3px); left: 0; right: 0; display: grid; max-height: 220px; overflow: auto; border: 1px solid #cfc7b8; background: #fff; box-shadow: 0 8px 20px #0002; }
+.brand-search-results button { padding: 10px 12px; border: 0; border-bottom: 1px solid #eee8de; background: #fff; color: #181714; text-align: left; cursor: pointer; font: inherit; }
+.brand-search-results button:hover { background: #f5f0e7; }
+.brand-search-results span { padding: 10px 12px; color: #89867f; font-size: 12px; }
+.brand-search-clear { margin-top: 6px; padding: 0; border: 0; background: none; color: var(--gold-dark); cursor: pointer; font-size: 12px; text-align: left; }
 .admin-list { display: grid; }
 .admin-list article { display: flex; align-items: center; justify-content: space-between; gap: 18px; padding: 15px 0; border-bottom: 1px solid #e4dfd5; }
 .admin-list article > div { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; }
