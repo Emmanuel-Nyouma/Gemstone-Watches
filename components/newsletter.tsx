@@ -9,13 +9,13 @@ export function Newsletter() {
   return (
     <section className="newsletter">
       <div className="shell newsletter-inner">
-        <div><p className="eyebrow light">Private notes</p><h2>Stories worth<br />making time for.</h2></div>
+        <div><p className="eyebrow light">Notes privées</p><h2>Des histoires qui<br />méritent votre temps.</h2></div>
         <div>
-          <p>New arrivals, collector guides and invitations from our watch desk—sent with restraint.</p>
-          {submitted ? <p className="form-success" role="status">Welcome to the Gemstone journal.</p> : (
-            <form onSubmit={handleSubmit}><label className="sr-only" htmlFor="newsletter-email">Email address</label><input id="newsletter-email" type="email" required placeholder="Your email address" /><button type="submit" aria-label="Subscribe"><ArrowRight /></button></form>
+          <p>Nouveautés, conseils de collectionneurs et invitations de notre équipe horlogère.</p>
+          {submitted ? <p className="form-success" role="status">Bienvenue dans le journal Gemstone.</p> : (
+            <form onSubmit={handleSubmit}><label className="sr-only" htmlFor="newsletter-email">Adresse e-mail</label><input id="newsletter-email" type="email" required placeholder="Votre adresse e-mail" /><button type="submit" aria-label="S’inscrire"><ArrowRight /></button></form>
           )}
-          <small>By subscribing, you agree to our privacy policy.</small>
+          <small>En vous inscrivant, vous acceptez notre politique de confidentialité.</small>
         </div>
       </div>
     </section>

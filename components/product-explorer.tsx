@@ -82,32 +82,32 @@ export function ProductExplorer({ initialProducts, initialSearch = "", title = "
   const filterSidebar = (
     <aside className={`filter-sidebar ${mobileFilters ? "is-open" : ""}`} aria-label="Watch filters">
       <div className="filter-mobile-head"><strong>Filters {activeCount > 0 && `(${activeCount})`}</strong><button onClick={() => setMobileFilters(false)} aria-label="Close filters"><X /></button></div>
-      <FilterGroup label="Brand" values={options.brands} selected={filters.brands} onToggle={(value) => toggle("brands", value)} />
+      <FilterGroup label="Marque" values={options.brands} selected={filters.brands} onToggle={(value) => toggle("brands", value)} />
       <details className="filter-group" open><summary>Prix <ChevronDown size={15} /></summary><div className="price-filter"><div><span>0 FCFA</span><strong>Jusqu’à {maxPrice.toLocaleString("fr-FR")} FCFA</strong></div><input type="range" min="500" max="20000000" step="50000" value={maxPrice} onChange={(event) => { setMaxPrice(Number(event.target.value)); setPage(1); }} aria-label="Prix maximum en FCFA" /></div></details>
-      <FilterGroup label="Gender" values={options.genders} selected={filters.genders} onToggle={(value) => toggle("genders", value)} />
-      <FilterGroup label="Movement" values={options.movements} selected={filters.movements} onToggle={(value) => toggle("movements", value)} />
-      <FilterGroup label="Strap material" values={options.straps} selected={filters.straps} onToggle={(value) => toggle("straps", value)} />
-      <FilterGroup label="Dial color" values={options.dials} selected={filters.dials} onToggle={(value) => toggle("dials", value)} />
-      <FilterGroup label="Case size" values={options.sizes} selected={filters.sizes} onToggle={(value) => toggle("sizes", value)} suffix=" mm" />
-      <button className="filter-clear" onClick={clear}>Clear all filters</button>
-      <button className="button button-dark mobile-filter-apply" onClick={() => setMobileFilters(false)}>Show {filtered.length} watches</button>
+      <FilterGroup label="Genre" values={options.genders} selected={filters.genders} onToggle={(value) => toggle("genders", value)} />
+      <FilterGroup label="Mouvement" values={options.movements} selected={filters.movements} onToggle={(value) => toggle("movements", value)} />
+      <FilterGroup label="Bracelet" values={options.straps} selected={filters.straps} onToggle={(value) => toggle("straps", value)} />
+      <FilterGroup label="Couleur du cadran" values={options.dials} selected={filters.dials} onToggle={(value) => toggle("dials", value)} />
+      <FilterGroup label="Taille du boîtier" values={options.sizes} selected={filters.sizes} onToggle={(value) => toggle("sizes", value)} suffix=" mm" />
+      <button className="filter-clear" onClick={clear}>Effacer les filtres</button>
+      <button className="button button-dark mobile-filter-apply" onClick={() => setMobileFilters(false)}>Afficher {filtered.length} montres</button>
     </aside>
   );
 
   return (
     <section className="catalog-explorer">
       <div className="catalog-toolbar">
-        <div><p className="eyebrow">Curated inventory</p><h2>{title}</h2><span aria-live="polite">{isSearching ? "Recherche…" : `${filtered.length} ${filtered.length === 1 ? "montre" : "montres"}`}</span></div>
+        <div><p className="eyebrow">Sélection Gemstone</p><h2>{title}</h2><span aria-live="polite">{isSearching ? "Recherche…" : `${filtered.length} ${filtered.length === 1 ? "montre" : "montres"}`}</span></div>
         <div className="catalog-actions">
-          <label className="catalog-search"><Search size={17} /><span className="sr-only">Search watches</span><input value={search} onChange={(event) => { setSearch(event.target.value); setPage(1); }} placeholder="Search collection" /></label>
-          <button className="filter-toggle" onClick={() => setMobileFilters(true)}><SlidersHorizontal size={17} /> Filters {activeCount > 0 && `(${activeCount})`}</button>
-          <label className="sort-select"><span>Sort by</span><select value={sort} onChange={(event) => { setSort(event.target.value as Sort); setPage(1); }} aria-label="Sort watches"><option value="newest">Newest</option><option value="low">Price: low to high</option><option value="high">Price: high to low</option><option value="popular">Most popular</option></select><ChevronDown size={14} /></label>
+          <label className="catalog-search"><Search size={17} /><span className="sr-only">Rechercher une montre</span><input value={search} onChange={(event) => { setSearch(event.target.value); setPage(1); }} placeholder="Rechercher dans la collection" /></label>
+          <button className="filter-toggle" onClick={() => setMobileFilters(true)}><SlidersHorizontal size={17} /> Filtres {activeCount > 0 && `(${activeCount})`}</button>
+          <label className="sort-select"><span>Trier par</span><select value={sort} onChange={(event) => { setSort(event.target.value as Sort); setPage(1); }} aria-label="Trier les montres"><option value="newest">Plus récentes</option><option value="low">Prix croissant</option><option value="high">Prix décroissant</option><option value="popular">Plus populaires</option></select><ChevronDown size={14} /></label>
         </div>
       </div>
       <div className="catalog-layout">
         {filterSidebar}
         <div className="catalog-results">
-          {visible.length ? <div className="product-grid">{visible.map((product, index) => <ProductCard key={product.id} product={product} priority={index < 2} />)}</div> : <div className="empty-state"><p className="eyebrow">No matches</p><h3>Let&apos;s widen the search.</h3><p>Try removing a filter or searching for a different reference.</p><button className="button button-dark" onClick={clear}>Reset filters</button></div>}
+          {visible.length ? <div className="product-grid">{visible.map((product, index) => <ProductCard key={product.id} product={product} priority={index < 2} />)}</div> : <div className="empty-state"><p className="eyebrow">Aucun résultat</p><h3>Élargissons la recherche.</h3><p>Retirez un filtre ou recherchez une autre référence.</p><button className="button button-dark" onClick={clear}>Réinitialiser les filtres</button></div>}
           {totalPages > 1 && <nav className="pagination" aria-label="Catalog pages"><button disabled={page === 1} onClick={() => { setPage((value) => value - 1); window.scrollTo({ top: 250, behavior: "smooth" }); }}>Previous</button>{Array.from({ length: totalPages }, (_, index) => index + 1).map((number) => <button key={number} className={page === number ? "active" : ""} aria-current={page === number ? "page" : undefined} onClick={() => { setPage(number); window.scrollTo({ top: 250, behavior: "smooth" }); }}>{number}</button>)}<button disabled={page === totalPages} onClick={() => { setPage((value) => value + 1); window.scrollTo({ top: 250, behavior: "smooth" }); }}>Next</button></nav>}
         </div>
       </div>

@@ -11,10 +11,10 @@ export function SiteHeader({ brands, categories }: { brands: Brand[]; categories
 
   return (
     <>
-      <a className="skip-link" href="#main-content">Skip to content</a>
+      <a className="skip-link" href="#main-content">Aller au contenu</a>
       <div className="announcement">
-        <span><ShieldCheck size={14} aria-hidden="true" /> Authenticated by independent specialists</span>
-        <span className="announcement-note">Complimentary insured delivery on every order</span>
+        <span><ShieldCheck size={14} aria-hidden="true" /> Authentifié par des spécialistes indépendants</span>
+        <span className="announcement-note">Livraison assurée offerte sur chaque commande</span>
       </div>
       <header className="site-header">
         <div className="shell header-inner">
@@ -26,21 +26,21 @@ export function SiteHeader({ brands, categories }: { brands: Brand[]; categories
             <span><strong>Gemstone</strong><small>Watches</small></span>
           </Link>
           <nav className="desktop-nav" aria-label="Main navigation">
-            <Link href="/shop">Shop all</Link>
+            <Link href="/shop">Toutes les montres</Link>
             <details className="nav-dropdown">
-              <summary>Brands <ChevronDown size={13} aria-hidden="true" /></summary>
+              <summary>Marques <ChevronDown size={13} aria-hidden="true" /></summary>
               <div className="mega-panel brand-panel">
                 <div>
-                  <p className="menu-kicker">Watchmakers</p>
+                  <p className="menu-kicker">Maisons horlogères</p>
                   <div className="mega-links">
                     {brands.slice(0, 12).map((brand) => <Link key={brand.slug} href={`/brands/${brand.slug}`}>{brand.name}<span>{brand.origin.split(",")[0]}</span></Link>)}
                   </div>
                   <Link className="all-brands-link" href="/brands">Voir toutes les marques →</Link>
                 </div>
                 <Link className="mega-feature" href="/brands/omega">
-                  <span>Editorial selection</span>
-                  <strong>The legacy of the Moonwatch</strong>
-                  <em>Explore Omega →</em>
+                  <span>Sélection éditoriale</span>
+                  <strong>L’héritage de la Moonwatch</strong>
+                  <em>Découvrir Omega →</em>
                 </Link>
               </div>
             </details>
@@ -70,12 +70,12 @@ export function SiteHeader({ brands, categories }: { brands: Brand[]; categories
             <button className="icon-button" onClick={() => setMenuOpen(false)} aria-label="Close menu"><X /></button>
           </div>
           <nav aria-label="Mobile navigation" onClick={() => setMenuOpen(false)}>
-            <Link href="/shop">Shop all watches <span>→</span></Link>
-            <p>Featured brands</p>
+            <Link href="/shop">Toutes les montres <span>→</span></Link>
+            <p>Marques à découvrir</p>
             {brands.slice(0, 6).map((brand) => <Link key={brand.slug} href={`/brands/${brand.slug}`}>{brand.name}</Link>)}
-            <p>Discover</p>
+            <p>Découvrir</p>
             <Link href="/about">À propos</Link>
-            <Link href="/contact">Contact & concierge</Link>
+            <Link href="/contact">Contact & conseil</Link>
           </nav>
         </div>
       )}
@@ -84,13 +84,13 @@ export function SiteHeader({ brands, categories }: { brands: Brand[]; categories
         <div className="search-overlay" role="dialog" aria-modal="true" aria-label="Search watches">
           <button className="icon-button search-close" onClick={() => setSearchOpen(false)} aria-label="Close search"><X /></button>
           <div>
-            <p className="eyebrow">Find your watch</p>
+            <p className="eyebrow">Trouvez votre montre</p>
             <form action="/shop">
               <Search size={24} aria-hidden="true" />
-              <input name="q" autoFocus placeholder="Search by brand, model or reference" aria-label="Search catalog" />
-              <button type="submit">Search</button>
+            <input name="q" autoFocus placeholder="Rechercher par marque, modèle ou référence" aria-label="Rechercher dans le catalogue" />
+              <button type="submit">Rechercher</button>
             </form>
-            <p className="search-hint">Try “Moonwatch”, “chronograph” or “blue dial”</p>
+            <p className="search-hint">Essayez « Moonwatch », « chronographe » ou « cadran bleu »</p>
           </div>
         </div>
       )}

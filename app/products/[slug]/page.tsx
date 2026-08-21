@@ -37,15 +37,15 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
     <>
       <StructuredData data={[productSchema, breadcrumbSchema]} />
       <div className="product-page shell">
-        <Breadcrumb items={[{ label: "Home", href: "/" }, { label: "Watches", href: "/shop" }, { label: product.brand, href: `/brands/${product.brandSlug}` }, { label: product.model }]} />
+        <Breadcrumb items={[{ label: "Accueil", href: "/" }, { label: "Montres", href: "/shop" }, { label: product.brand, href: `/brands/${product.brandSlug}` }, { label: product.model }]} />
         <div className="product-detail-grid">
           <ProductGallery images={product.images} media={product.media} title={`${product.brand} ${product.model}`} />
           <aside className="product-summary">
             <p className="eyebrow">{product.brand}</p><h1>{product.title}</h1><p className="reference">Reference {product.referenceNumber}</p><p className="product-price">{formatPrice(product.price)}</p>
-            <div className="availability"><span><i /><strong>{product.availability}</strong></span><span>Ships in 1–2 business days</span></div>
+            <div className="availability"><span><i /><strong>{product.availability}</strong></span><span>Expédition sous 1 à 2 jours ouvrés</span></div>
             <p className="product-description">{product.description}</p>
             <ProductActions title={`${product.brand} ${product.title}`} reference={product.referenceNumber} />
-            <div className="purchase-assurances"><span><ShieldCheck />Authenticated</span><span><PackageCheck />Insured delivery</span><span><Clock3 />12-month warranty</span></div>
+            <div className="purchase-assurances"><span><ShieldCheck />Authentifiée</span><span><PackageCheck />Livraison assurée</span><span><Clock3 />Garantie 12 mois</span></div>
           </aside>
         </div>
       </div>
